@@ -21,4 +21,16 @@ def bot_messages(message):
 
     bot.send_message(message.chat.id, 'Я могу исполнить три желания:\n Создать задачу\n Найти задачу\n Открыть задачу', reply_markup=markup)
 
+
+@bot.message_handler(content_types=["text"])
+def handle_text(message):
+    if message.text.strip() == 'Создать задачу':
+        bot.send_message(message.chat.id, 'Создание задачи. Введите название задачи.')
+        bot.register_next_step_handler(message, get_create_issue_summary)
+    elif message.text.strip() == 'Найти задачу':
+        bot.register_next_step_handler(message, get_search_issue)
+    elif message.text.strip() == 'Открыть задачу':
+        bot.send_message(message.chat.id, 'Открытые задачи. Введите номер задачи TJ-...')
+        bot.register_next_step_handler(message, get_open_issue)
+
 bot.polling(none_stop=True)
